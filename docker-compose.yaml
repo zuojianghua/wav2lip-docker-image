@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  py-sd:
+    image: zuojianghua/wav2lip-docker-image
+    ports:
+      - "8800:8800"
+      - "8888:8888"
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - "./results:/workspace/Wav2Lip/results"  
+      - "./cache:/root/.cache"
+      - "./app.py:/workspace/app.py" 
+    networks:
+      - sdnet
+    restart: always
+    entrypoint: /bin/bash -c "pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && python /workspace/app.py"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
+networks:
+  sdnet:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
