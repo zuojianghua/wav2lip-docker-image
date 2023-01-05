@@ -2,6 +2,8 @@ FROM nvcr.io/nvidia/pytorch:22.11-py3
 WORKDIR /workspace
 USER root
 EXPOSE 8800
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Shanghai
 COPY ./requirements.txt /workspace
 RUN apt-get update && apt-get upgrade -y && apt-get install git -y && apt-get install ffmpeg -y
 RUN export FORCE_CUDA="1" && export TORCH_CUDA_ARCH_LIST="6.1;8.6" && pip install -r /workspace/requirements.txt
